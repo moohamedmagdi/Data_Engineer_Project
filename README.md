@@ -1,5 +1,4 @@
-# NTI_Depi_Data_Engineer_Project
-NTI Depi Data Engineer Project
+
 
 # Weather Data Pipeline with Python and PostgreSQL
 
