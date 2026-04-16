@@ -13,6 +13,6 @@ with DAG(
     create_schema = PostgresOperator(
         task_id="create_analytics_schema",
         postgres_conn_id="postgres_source",
-        sql="sql_weather/staging_to_analytics/00_create_schema.sql",
+        sql="sql_weather/stg_to_dwh/00_create_schema.sql",
     )
 
