@@ -7,12 +7,37 @@ with DAG(
     start_date=datetime(2024, 1, 1),
     schedule="0 3 * * *",
     catchup=False,
-    tags=["olist", "analytics"],
+    tags=["weather", "dwh"],
 ) as dag:
 
     create_schema = PostgresOperator(
-        task_id="create_analytics_schema",
-        postgres_conn_id="postgres_source",
+        task_id="create_dwh_schema",
+        postgres_conn_id="postgres_airflow",
         sql="sql_weather/stg_to_dwh/00_create_schema.sql",
     )
 
+    dim_location = PostgresOperator(
+        task_id="dim_location",
+        postgres_conn_id="postgres_airflow",
+        sql="sql_weather/stg_to_dwh/01_dim_location.sql",
+    )
+
+    fact_current = PostgresOperator(
+        task_id="fact_current_weather",
+        postgres_conn_id="postgres_airflow",
+        sql="sql_weather/stg_to_dwh/02_fact_current_weather.sql",
+    )
+
+    fact_forecast = PostgresOperator(
+        task_id="fact_forecast",
+        postgres_conn_id="postgres_airflow",
+        sql="sql_weather/stg_to_dwh/03_fact_forecast.sql",
+    )
+
+    fact_chill = PostgresOperator(
+        task_id="fact_chill_units",
+        postgres_conn_id="postgres_airflow",
+        sql="sql_weather/stg_to_dwh/04_fact_chill_units.sql",
+    )
+
+    create_schema >> dim_location >> [fact_current, fact_forecast, fact_chill]
