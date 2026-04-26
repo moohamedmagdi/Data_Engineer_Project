@@ -54,21 +54,6 @@ Example parameters:
 
 ---
 
-## Project Structure
-
-```
-weather-data-pipeline/
-│
-├── docker-compose.yml
-├── weather_extract.py
-├── weather_transform.py
-├── weather_load.py
-├── requirements.txt
-└── README.md
-```
-
----
-
 ## Database Schema
 
 The pipeline stores processed weather data in a PostgreSQL table.
