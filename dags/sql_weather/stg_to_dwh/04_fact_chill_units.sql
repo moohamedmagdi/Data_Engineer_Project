@@ -4,9 +4,8 @@ CREATE TABLE dwh.fact_chill_units AS
 SELECT
     ROW_NUMBER() OVER () AS chill_id,
     l.location_id,
-    DATE(h.weather_time) AS date,
+    dd.date_id,
 
-    -- تطبيق Positive Daily Logic
     GREATEST(
         SUM(
             CASE
@@ -22,10 +21,13 @@ SELECT
 
 FROM staging.stg_hourly_weather h
 JOIN staging.stg_location l
-    ON h.city = l.location_name   -- ✅ نفس تصحيح الكود الشغال
+    ON h.city = l.location_name
     AND h.latitude = l.latitude
     AND h.longitude = l.longitude
 
+JOIN dwh.dim_date dd
+    ON DATE(h.weather_time) = dd.date
+
 GROUP BY
     l.location_id,
-    DATE(h.weather_time);
+    dd.date_id;
