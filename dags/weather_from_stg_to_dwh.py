@@ -22,10 +22,10 @@ with DAG(
         sql="sql_weather/stg_to_dwh/01_dim_location.sql",
     )
 
-    fact_current = PostgresOperator(
-        task_id="fact_current_weather",
+    dim_date = PostgresOperator(
+        task_id="dim_date",
         postgres_conn_id="postgres_airflow",
-        sql="sql_weather/stg_to_dwh/02_fact_current_weather.sql",
+        sql="sql_weather/stg_to_dwh/02_dim_date.sql",
     )
 
     fact_forecast = PostgresOperator(
@@ -40,4 +40,9 @@ with DAG(
         sql="sql_weather/stg_to_dwh/04_fact_chill_units.sql",
     )
 
-    create_schema >> dim_location >> [fact_current, fact_forecast, fact_chill]
+    # ترتيب التنفيذ
+    create_schema >> dim_location
+    create_schema >> dim_date
+
+    dim_location >> [fact_forecast, fact_chill]
+    dim_date >> [fact_forecast, fact_chill]
