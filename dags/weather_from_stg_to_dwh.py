@@ -32,7 +32,7 @@ with DAG(
     fact_spray_recommendation = PostgresOperator(
         task_id="fact_spray_recommendation",
         postgres_conn_id="postgres_airflow",
-        sql="sql_weather/stg_to_dwh/03_fact_spray_recommendation.sql",
+        sql="sql_weather/stg_to_dwh/03_fact_agro_recommendation.sql",
     )
 
     # 🔥 04 Chill Units
