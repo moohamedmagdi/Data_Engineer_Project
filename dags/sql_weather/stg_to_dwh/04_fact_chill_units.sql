@@ -5,6 +5,7 @@ SELECT
     ROW_NUMBER() OVER () AS chill_id,
     l.location_id,
     dd.date_id,
+    c.crop_name_id,
 
     GREATEST(
         SUM(
@@ -20,6 +21,7 @@ SELECT
     ) AS total_chill_units
 
 FROM staging.stg_hourly_weather h
+
 JOIN staging.stg_location l
     ON h.city = l.location_name
     AND h.latitude = l.latitude
@@ -28,6 +30,9 @@ JOIN staging.stg_location l
 JOIN dwh.dim_date dd
     ON DATE(h.weather_time) = dd.date
 
+CROSS JOIN dwh.dim_crop c
+
 GROUP BY
     l.location_id,
-    dd.date_id;
+    dd.date_id,
+    c.crop_name_id;
